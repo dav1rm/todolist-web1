@@ -18,13 +18,16 @@ class TodoController {
   }
 
   async store(req, res) {
-    const { name } = req.body;
+    const { title, description, owner, endDate } = req.body;
 
     const todo = {
       id: uuid(),
-      name,
+      title,
+      description,
+      owner,
       // CREATRED, INPROGRESS, FINALIZED
       status: "CREATRED",
+      endDate,
       createdAt: new Date(),
     };
 
