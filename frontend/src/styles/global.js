@@ -9,16 +9,18 @@ const GlobalStyle = createGlobalStyle`
   }
   
   html, body, #root {
-    height: 100%;
+    height: 100vh;
   }
 
   body {
     text-rendering: optimizeLegibility !important;
     -webkit-font-smoothing: antialiased !important;
     font-family: 'Montserrat', sans-serif;
+    background-color: #ECE9FC;
+    color: #1D1D1B;
   }
 
-  button {
+  button, a {
     cursor: pointer;
   }
 `;

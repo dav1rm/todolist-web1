@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 
 import api from "../../services/api";
+import {
+  Container,
+  Header,
+  Form,
+  ModalHeader,
+  Columns,
+  TodoColumn,
+  TodoHeader,
+  TodoContent,
+} from "./styles";
 
 function Main() {
   const [id, setId] = useState("");
@@ -106,27 +116,29 @@ function Main() {
 
   return (
     <>
-      <main>
-        <header>
+      <Container>
+        <Header>
           <h1>Minha Lista de Tarefas</h1>
 
           <button type="button" onClick={() => setIsOpen(true)}>
             Nova Tarefa
           </button>
+        </Header>
 
-          {!!error && <span>{error}</span>}
-        </header>
-        <section>
-          <article>
-            <header>
-              <h3>Tarefas Pedentes</h3>
-            </header>
-            <ul>
+        {!!error && <span>{error}</span>}
+
+        <Columns>
+          <TodoColumn>
+            <TodoHeader>
+              <h3>Pedentes</h3>
+            </TodoHeader>
+            <TodoContent>
               {todos.map((todo) => {
                 if (todo.status === "CREATED") {
                   return (
                     <li key={todo.id}>
-                      <span>{todo.title}</span>
+                      <h4>{todo.title}</h4>
+                      <span>{todo.description}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
                       <button type="button" onClick={() => openModal(todo)}>
@@ -142,18 +154,19 @@ function Main() {
                   );
                 }
               })}
-            </ul>
-          </article>
-          <article>
-            <header>
-              <h3>Tarefas Em Andamento</h3>
-            </header>
-            <ul>
+            </TodoContent>
+          </TodoColumn>
+          <TodoColumn>
+            <TodoHeader>
+              <h3>Em Andamento</h3>
+            </TodoHeader>
+            <TodoContent>
               {todos.map((todo) => {
                 if (todo.status === "INPROGRESS") {
                   return (
                     <li key={todo.id}>
-                      <span>{todo.title}</span>
+                      <h4>{todo.title}</h4>
+                      <span>{todo.description}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
                       <button type="button" onClick={() => openModal(todo)}>
@@ -169,18 +182,19 @@ function Main() {
                   );
                 }
               })}
-            </ul>
-          </article>
-          <article>
-            <header>
-              <h3>Tarefas Cumpridas</h3>
-            </header>
-            <ul>
+            </TodoContent>
+          </TodoColumn>
+          <TodoColumn>
+            <TodoHeader>
+              <h3>Finalizadas</h3>
+            </TodoHeader>
+            <TodoContent>
               {todos.map((todo) => {
                 if (todo.status === "FINALIZED") {
                   return (
                     <li key={todo.id}>
-                      <span>{todo.title}</span>
+                      <h4>{todo.title}</h4>
+                      <span>{todo.description}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
                       <button type="button" onClick={() => openModal(todo)}>
@@ -196,18 +210,20 @@ function Main() {
                   );
                 }
               })}
-            </ul>
-          </article>
-        </section>
-      </main>
+            </TodoContent>
+          </TodoColumn>
+        </Columns>
+      </Container>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
       >
-        <button onClick={closeModal}>Fechar</button>
-        <h4>{id ? "Editar Tarefa" : "Adicionar Nova Tarefa"}</h4>
-        <form onSubmit={handleSubmit}>
+        <ModalHeader>
+          <h2>{id ? "Editar Tarefa" : "Adicionar Nova Tarefa"}</h2>
+          <button onClick={closeModal}>Fechar</button>
+        </ModalHeader>
+        <Form onSubmit={handleSubmit}>
           {!!id && (
             <label className="label" htmlFor="status">
               Status
@@ -264,7 +280,7 @@ function Main() {
             />
           </label>
           <button type="submit">{id ? "Salvar" : "Cadastrar"}</button>
-        </form>
+        </Form>
       </Modal>
     </>
   );
