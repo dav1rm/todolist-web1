@@ -5,7 +5,7 @@ function Main() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [owner, setOwner] = useState("");
-  const [date, setDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
   const [todos, setTodos] = useState([]);
 
@@ -23,7 +23,7 @@ function Main() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || !owner || !date) {
+    if (!title || !description || !owner || !endDate) {
       setError("Campos obrigatórios!");
       return;
     }
@@ -32,7 +32,7 @@ function Main() {
       title,
       description,
       owner,
-      date,
+      endDate,
     });
 
     setTodos((prev) => [...prev, response.data]);
@@ -40,7 +40,7 @@ function Main() {
     setTitle("");
     setDescription("");
     setOwner("");
-    setDate("");
+    setEndDate("");
   };
 
   const handleDeleteTodo = async (id) => {
@@ -65,7 +65,6 @@ function Main() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              name="title"
               placeholder="Digite o Título..."
             />
           </label>
@@ -76,7 +75,6 @@ function Main() {
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              name="description"
               placeholder="Digite a descrição..."
             />
           </label>
@@ -87,7 +85,6 @@ function Main() {
               id="owner"
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
-              name="owner"
               placeholder="Digite o nome do responsável..."
             />
           </label>
@@ -96,9 +93,8 @@ function Main() {
             <input
               type="date"
               id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              name="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               placeholder="Digite a data prevista para cumprir..."
             />
           </label>
@@ -117,7 +113,7 @@ function Main() {
                   <li key={todo.id}>
                     <span>{todo.title}</span>
                     <span>{todo.owner}</span>
-                    <span>Data prevista: {todo.date}</span>
+                    <span>Data prevista: {todo.endDate}</span>
                     <button type="button">Cumprir</button>
                     <button type="button">Editar</button>
                     <button
@@ -159,7 +155,7 @@ function Main() {
                   <li key={todo.id}>
                     <span>{todo.title}</span>
                     <span>{todo.owner}</span>
-                    <span>Data prevista: {todo.date}</span>
+                    <span>Data prevista: {todo.endDate}</span>
                     <button type="button">Cumprir</button>
                     <button type="button">Editar</button>
                     <button type="button">Excluir</button>
@@ -180,7 +176,7 @@ function Main() {
                   <li key={todo.id}>
                     <span>{todo.title}</span>
                     <span>{todo.owner}</span>
-                    <span>Data prevista: {todo.date}</span>
+                    <span>Data prevista: {todo.endDate}</span>
                     <button type="button">Cumprir</button>
                     <button type="button">Editar</button>
                     <button type="button">Excluir</button>
