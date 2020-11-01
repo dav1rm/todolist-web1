@@ -5,6 +5,7 @@ import api from "../../services/api";
 
 function Main() {
   const [id, setId] = useState("");
+  const [status, setStatus] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [owner, setOwner] = useState("");
@@ -24,7 +25,7 @@ function Main() {
       });
   }, []);
 
-  const handleSubmit = async (e, edit = false) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title || !description || !owner || !endDate) {
@@ -33,8 +34,9 @@ function Main() {
     }
     let response = null;
 
-    if (edit) {
+    if (id) {
       response = await api.put(`/todos/${id}`, {
+        status,
         title,
         description,
         owner,
@@ -73,6 +75,7 @@ function Main() {
   function openModal(todo) {
     setIsOpen(true);
 
+    setStatus(todo.status);
     setId(todo.id);
     setTitle(todo.title);
     setDescription(todo.description);
@@ -94,6 +97,7 @@ function Main() {
   function closeModal() {
     setIsOpen(false);
     setId("");
+    setStatus("");
     setTitle("");
     setDescription("");
     setOwner("");
@@ -106,52 +110,11 @@ function Main() {
         <header>
           <h1>Minha Lista de Tarefas</h1>
 
-          {!!error && <span>{error}</span>}
+          <button type="button" onClick={() => setIsOpen(true)}>
+            Nova Tarefa
+          </button>
 
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <h4>Adicionar Nova tarefa</h4>
-            <label className="label" htmlFor="title">
-              Título
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Digite o Título..."
-              />
-            </label>
-            <label className="label" htmlFor="description">
-              Descrição
-              <input
-                type="text"
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Digite a descrição..."
-              />
-            </label>
-            <label className="label" htmlFor="owner">
-              Responsável pela tarefa
-              <input
-                type="text"
-                id="owner"
-                value={owner}
-                onChange={(e) => setOwner(e.target.value)}
-                placeholder="Digite o nome do responsável..."
-              />
-            </label>
-            <label className="label" htmlFor="date">
-              Data prevista
-              <input
-                type="date"
-                id="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                placeholder="Digite a data prevista para cumprir..."
-              />
-            </label>
-            <button type="submit">Adicionar</button>
-          </form>
+          {!!error && <span>{error}</span>}
         </header>
         <section>
           <article>
@@ -166,7 +129,6 @@ function Main() {
                       <span>{todo.title}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
-                      <button type="button">Cumprir</button>
                       <button type="button" onClick={() => openModal(todo)}>
                         Editar
                       </button>
@@ -180,22 +142,6 @@ function Main() {
                   );
                 }
               })}
-              {/* <li>
-              <span>Estudar javascript</span>
-              <span>Davi Rodrigues</span>
-              <span>Data prevista: 20/04/20</span>
-              <button type="button">Cumprir</button>
-              <button type="button">Editar</button>
-              <button type="button">Excluir</button>
-            </li>
-            <li>
-              <span>Ler um livro</span>
-              <span>Davi Rodrigues</span>
-              <span>Data prevista: 20/04/20</span>
-              <button type="button">Cumprir</button>
-              <button type="button">Editar</button>
-              <button type="button">Excluir</button>
-            </li> */}
             </ul>
           </article>
           <article>
@@ -210,9 +156,15 @@ function Main() {
                       <span>{todo.title}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
-                      <button type="button">Cumprir</button>
-                      <button type="button">Editar</button>
-                      <button type="button">Excluir</button>
+                      <button type="button" onClick={() => openModal(todo)}>
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTodo(todo.id)}
+                      >
+                        Excluir
+                      </button>
                     </li>
                   );
                 }
@@ -231,9 +183,15 @@ function Main() {
                       <span>{todo.title}</span>
                       <span>{todo.owner}</span>
                       <span>Data prevista: {todo.endDate}</span>
-                      <button type="button">Cumprir</button>
-                      <button type="button">Editar</button>
-                      <button type="button">Excluir</button>
+                      <button type="button" onClick={() => openModal(todo)}>
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTodo(todo.id)}
+                      >
+                        Excluir
+                      </button>
                     </li>
                   );
                 }
@@ -246,12 +204,25 @@ function Main() {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
       >
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-        <form onSubmit={(e) => handleSubmit(e, true)}>
-          <h4>Adicionar Nova tarefa</h4>
+        <button onClick={closeModal}>Fechar</button>
+        <h4>{id ? "Editar Tarefa" : "Adicionar Nova Tarefa"}</h4>
+        <form onSubmit={handleSubmit}>
+          {!!id && (
+            <label className="label" htmlFor="status">
+              Status
+              <select
+                id="status"
+                onChange={(e) => setStatus(e.target.value)}
+                value={status}
+              >
+                <option>Selecione...</option>
+                <option value="CREATED">Pendente</option>
+                <option value="INPROGRESS">Em Andamento</option>
+                <option value="FINALIZED">Finalizado</option>
+              </select>
+            </label>
+          )}
           <label className="label" htmlFor="title">
             Título
             <input
@@ -292,7 +263,7 @@ function Main() {
               placeholder="Digite a data prevista para cumprir..."
             />
           </label>
-          <button type="submit">Salvar</button>
+          <button type="submit">{id ? "Salvar" : "Cadastrar"}</button>
         </form>
       </Modal>
     </>
