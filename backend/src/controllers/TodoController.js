@@ -25,8 +25,8 @@ class TodoController {
       title,
       description,
       owner,
-      // CREATRED, INPROGRESS, FINALIZED
-      status: "CREATRED",
+      // CREATED, INPROGRESS, FINALIZED
+      status: "CREATED",
       endDate,
       createdAt: new Date(),
     };
