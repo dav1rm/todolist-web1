@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
+import { IoIosClose, IoMdCreate, IoMdTrash } from "react-icons/io";
 
 import api from "../../services/api";
 import {
   Container,
   Header,
-  Form,
   ModalHeader,
+  ModalForm,
   Columns,
   TodoColumn,
   TodoHeader,
@@ -95,12 +96,16 @@ function Main() {
 
   const customStyles = {
     content: {
+      width: 660,
       top: "50%",
       left: "50%",
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
+    },
+    overlay: {
+      backgroundColor: "rgba(67, 68, 79, 0.6)",
     },
   };
 
@@ -137,19 +142,24 @@ function Main() {
                 if (todo.status === "CREATED") {
                   return (
                     <li key={todo.id}>
-                      <h4>{todo.title}</h4>
-                      <span>{todo.description}</span>
+                      <strong>{todo.title}</strong>
+                      <p>{todo.description}</p>
                       <span>{todo.owner}</span>
-                      <span>Data prevista: {todo.endDate}</span>
-                      <button type="button" onClick={() => openModal(todo)}>
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteTodo(todo.id)}
-                      >
-                        Excluir
-                      </button>
+                      <span>
+                        Data prevista:{" "}
+                        {new Date(todo.endDate).toLocaleDateString()}
+                      </span>
+                      <div className="footer">
+                        <button type="button" onClick={() => openModal(todo)}>
+                          <IoMdCreate size={22} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteTodo(todo.id)}
+                        >
+                          <IoMdTrash size={22} />
+                        </button>
+                      </div>
                     </li>
                   );
                 }
@@ -165,19 +175,24 @@ function Main() {
                 if (todo.status === "INPROGRESS") {
                   return (
                     <li key={todo.id}>
-                      <h4>{todo.title}</h4>
-                      <span>{todo.description}</span>
+                      <strong>{todo.title}</strong>
+                      <p>{todo.description}</p>
                       <span>{todo.owner}</span>
-                      <span>Data prevista: {todo.endDate}</span>
-                      <button type="button" onClick={() => openModal(todo)}>
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteTodo(todo.id)}
-                      >
-                        Excluir
-                      </button>
+                      <span>
+                        Data prevista:{" "}
+                        {new Date(todo.endDate).toLocaleDateString()}
+                      </span>
+                      <div className="footer">
+                        <button type="button" onClick={() => openModal(todo)}>
+                          <IoMdCreate size={22} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteTodo(todo.id)}
+                        >
+                          <IoMdTrash size={22} />
+                        </button>
+                      </div>
                     </li>
                   );
                 }
@@ -193,19 +208,24 @@ function Main() {
                 if (todo.status === "FINALIZED") {
                   return (
                     <li key={todo.id}>
-                      <h4>{todo.title}</h4>
-                      <span>{todo.description}</span>
-                      <span>{todo.owner}</span>
-                      <span>Data prevista: {todo.endDate}</span>
-                      <button type="button" onClick={() => openModal(todo)}>
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteTodo(todo.id)}
-                      >
-                        Excluir
-                      </button>
+                      <strong>{todo.title}</strong>
+                      <p>{todo.description}</p>
+                      <span className="user">{todo.owner}</span>
+                      <span>
+                        Data prevista:{" "}
+                        {new Date(todo.endDate).toLocaleDateString()}
+                      </span>
+                      <div className="footer">
+                        <button type="button" onClick={() => openModal(todo)}>
+                          <IoMdCreate size={22} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteTodo(todo.id)}
+                        >
+                          <IoMdTrash size={22} />
+                        </button>
+                      </div>
                     </li>
                   );
                 }
@@ -221,12 +241,16 @@ function Main() {
       >
         <ModalHeader>
           <h2>{id ? "Editar Tarefa" : "Adicionar Nova Tarefa"}</h2>
-          <button onClick={closeModal}>Fechar</button>
+          <button onClick={closeModal}>
+            <IoIosClose size={36} />
+          </button>
         </ModalHeader>
-        <Form onSubmit={handleSubmit}>
+        <ModalForm onSubmit={handleSubmit}>
           {!!id && (
-            <label className="label" htmlFor="status">
-              Status
+            <>
+              <label className="label" htmlFor="status">
+                Status
+              </label>
               <select
                 id="status"
                 onChange={(e) => setStatus(e.target.value)}
@@ -237,50 +261,50 @@ function Main() {
                 <option value="INPROGRESS">Em Andamento</option>
                 <option value="FINALIZED">Finalizado</option>
               </select>
-            </label>
+            </>
           )}
           <label className="label" htmlFor="title">
             Título
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Digite o Título..."
-            />
           </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Digite o Título..."
+          />
           <label className="label" htmlFor="description">
             Descrição
-            <input
-              type="text"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Digite a descrição..."
-            />
           </label>
+          <input
+            type="text"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Digite a descrição..."
+          />
           <label className="label" htmlFor="owner">
             Responsável pela tarefa
-            <input
-              type="text"
-              id="owner"
-              value={owner}
-              onChange={(e) => setOwner(e.target.value)}
-              placeholder="Digite o nome do responsável..."
-            />
           </label>
+          <input
+            type="text"
+            id="owner"
+            value={owner}
+            onChange={(e) => setOwner(e.target.value)}
+            placeholder="Digite o nome do responsável..."
+          />
           <label className="label" htmlFor="date">
             Data prevista
-            <input
-              type="date"
-              id="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              placeholder="Digite a data prevista para cumprir..."
-            />
           </label>
+          <input
+            type="date"
+            id="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            placeholder="Digite a data prevista para cumprir..."
+          />
           <button type="submit">{id ? "Salvar" : "Cadastrar"}</button>
-        </Form>
+        </ModalForm>
       </Modal>
     </>
   );

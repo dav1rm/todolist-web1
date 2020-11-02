@@ -21,7 +21,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button, a {
+    font-family: 'Montserrat', sans-serif;
     cursor: pointer;
+  }
+
+  input, select {
+    font-family: 'Montserrat', sans-serif;
   }
 `;
 
