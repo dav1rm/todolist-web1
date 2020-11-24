@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
-  input, select {
+  input, select, textarea {
     font-family: 'Montserrat', sans-serif;
   }
 `;

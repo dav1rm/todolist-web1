@@ -96,7 +96,6 @@ function Main() {
 
   const customStyles = {
     content: {
-      width: 660,
       top: "50%",
       left: "50%",
       right: "auto",
@@ -276,13 +275,13 @@ function Main() {
           <label className="label" htmlFor="description">
             Descrição
           </label>
-          <input
-            type="text"
+          <textarea
             id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
             placeholder="Digite a descrição..."
-          />
+            onChange={(e) => setDescription(e.target.value)}
+          >
+            {description}
+          </textarea>
           <label className="label" htmlFor="owner">
             Responsável pela tarefa
           </label>

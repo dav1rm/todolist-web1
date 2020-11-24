@@ -15,6 +15,9 @@ export const Header = styled.header`
 
   > h1 {
     color: #43444f;
+    @media (max-width: 600px) {
+      font-size: 26px;
+    }
   }
 
   > button {
@@ -26,6 +29,10 @@ export const Header = styled.header`
     color: #fff;
     border-radius: 4px;
     transition: all ease-in 0.2s;
+
+    @media (max-width: 600px) {
+      font-size: 14px;
+    }
 
     &:hover {
       background-color: #574a9a;
@@ -67,7 +74,8 @@ export const ModalForm = styled.form`
   }
 
   > input,
-  select {
+  select,
+  textarea {
     font-size: 16px;
     background-color: #fff;
     color: #1d1d1b;
@@ -79,6 +87,10 @@ export const ModalForm = styled.form`
     &:focus {
       border-color: #9586e2;
     }
+  }
+
+  > textarea {
+    resize: none;
   }
 
   > button {
@@ -102,6 +114,10 @@ export const Columns = styled.section`
   display: flex;
   flex: 1;
   padding: 0px 35px;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 export const TodoColumn = styled.article`
@@ -116,6 +132,14 @@ export const TodoColumn = styled.article`
 
   & + article {
     margin-left: 20px;
+  }
+
+  @media (max-width: 800px) {
+    & + article {
+      margin-left: 0px;
+    }
+
+    margin-bottom: 20px;
   }
 `;
 
