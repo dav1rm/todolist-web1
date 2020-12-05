@@ -38,7 +38,6 @@ function Main() {
     ];
   }, [todos]);
 
-  console.log(todos);
   const handleOpenModal = (type, todo) => {
     if (type === 'form') {
       setFormVisible(true);
@@ -93,7 +92,6 @@ function Main() {
         visible={formVisible}
         data={editTodo}
         closeModal={() => {
-          console.log('edit', editTodo);
           setEditTodo(null);
           setFormVisible(false);
         }}

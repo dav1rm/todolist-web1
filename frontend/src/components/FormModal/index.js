@@ -40,6 +40,7 @@ function FormModal({ data, visible, closeModal }) {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
+      width: window.innerWidth > 700 ? 650 : window.innerWidth,
     },
     overlay: {
       backgroundColor: 'rgba(67, 68, 79, 0.6)',

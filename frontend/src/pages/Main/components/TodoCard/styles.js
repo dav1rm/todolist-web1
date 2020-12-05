@@ -8,6 +8,8 @@ export const Container = styled.li`
   border-radius: 8px;
   background: #fff;
   margin-bottom: 10px;
+
+  cursor: grab;
 `;
 
 export const Header = styled.header`
@@ -67,6 +69,6 @@ export const Footer = styled.footer`
 
   > span.user {
     font-weight: 500;
-    color: #1bb81c;
+    color: #0075bc;
   }
 `;

@@ -77,15 +77,15 @@ export const TodoColumn = styled.article`
 `;
 
 export const TodoHeader = styled.header`
-  padding: 10px 15px;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
   background-color: #4a94f8;
   border-radius: 8px;
 
   h3 {
     color: #fff;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 18px;
   }
 `;
 

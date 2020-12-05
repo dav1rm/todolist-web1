@@ -22,7 +22,7 @@ function TodoCard({ todo, handleEdit, handleDelete }) {
         <p>{description}</p>
       </Content>
       <Footer>
-        <span>{owner}</span>
+        <span className="user">{owner}</span>
         <span>{new Date(endDate).toLocaleDateString()}</span>
       </Footer>
     </Container>
