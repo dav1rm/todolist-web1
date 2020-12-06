@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useTodo } from '../../hooks/todos';
 import ConfirmModal from '../../components/ConfirmModal';
@@ -26,18 +26,6 @@ function Main() {
     loadTodos();
   }, []);
 
-  const filtered = useMemo(() => {
-    const created = todos.filter((todo) => todo.status === 'CREATED');
-    const inProgress = todos.filter((todo) => todo.status === 'INPROGRESS');
-    const ended = todos.filter((todo) => todo.status === 'FINALIZED');
-
-    return [
-      { title: `Pendentes - ${created.length}`, todos: created },
-      { title: `Em Andamento - ${inProgress.length}`, todos: inProgress },
-      { title: `Finalizadas - ${ended.length}`, todos: ended },
-    ];
-  }, [todos]);
-
   const handleOpenModal = (type, todo) => {
     if (type === 'form') {
       setFormVisible(true);
@@ -60,15 +48,17 @@ function Main() {
         </Header>
 
         <Columns>
-          {filtered.map((column) => (
+          {todos.map((column, listIndex) => (
             <TodoColumn key={column.title}>
               <TodoHeader>
                 <h3>{column.title}</h3>
               </TodoHeader>
               <TodoContent>
-                {column.todos.map((todo) => (
+                {column.todos.map((todo, index) => (
                   <TodoCard
                     key={todo.id}
+                    listIndex={listIndex}
+                    index={index}
                     todo={todo}
                     handleEdit={() => handleOpenModal('form', todo)}
                     handleDelete={() => handleOpenModal('confirm', todo)}

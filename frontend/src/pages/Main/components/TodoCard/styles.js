@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Container = styled.li`
   display: flex;
@@ -10,6 +10,22 @@ export const Container = styled.li`
   margin-bottom: 10px;
 
   cursor: grab;
+
+  ${(props) =>
+    props.isDragging &&
+    css`
+      border: 2px dashed rgba(0, 0, 0, 0.2);
+      box-shadow: none;
+      padding: 13px;
+      background: transparent;
+      cursor: grabbing;
+
+      header,
+      div,
+      footer {
+        opacity: 0;
+      }
+    `};
 `;
 
 export const Header = styled.header`
