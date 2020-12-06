@@ -5,7 +5,7 @@ import { IoIosClose } from 'react-icons/io';
 import { useTodo } from '../../hooks/todos';
 import { ModalHeader, ModalForm } from './styles';
 
-function FormModal({ data, visible, closeModal }) {
+function FormModal({ data, visible, closeModal, listIndex }) {
   // Hooks
   const { storeTodo, updateTodo } = useTodo();
 
@@ -66,7 +66,7 @@ function FormModal({ data, visible, closeModal }) {
     }
 
     if (id) {
-      updateTodo(id, { status, title, description, owner, endDate });
+      updateTodo(id, { status, title, description, owner, endDate }, listIndex);
     } else {
       storeTodo({ title, description, owner, endDate });
     }
@@ -84,7 +84,7 @@ function FormModal({ data, visible, closeModal }) {
           </button>
         </ModalHeader>
         <ModalForm onSubmit={handleSubmit}>
-          {!!error && <span>{error}</span>}
+          {!!error && <span className="error">{error}</span>}
 
           {!!id && (
             <>

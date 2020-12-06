@@ -19,6 +19,7 @@ function Main() {
   const [formVisible, setFormVisible] = useState(false);
   const [deleteTodo, setDeleteTodo] = useState(null);
   const [editTodo, setEditTodo] = useState(null);
+  const [currentListIndex, setCurrentListIndex] = useState(null);
 
   const { todos, loadTodos } = useTodo();
 
@@ -26,7 +27,10 @@ function Main() {
     loadTodos();
   }, []);
 
-  const handleOpenModal = (type, todo) => {
+  const handleOpenModal = (type, todo, listIndex) => {
+    console.log(todo);
+    setCurrentListIndex(listIndex);
+
     if (type === 'form') {
       setFormVisible(true);
       setEditTodo(todo);
@@ -51,7 +55,7 @@ function Main() {
           {todos.map((column, listIndex) => (
             <TodoColumn key={column.title}>
               <TodoHeader>
-                <h3>{column.title}</h3>
+                <h3>{`${column.title} - ${column.todos.length}`}</h3>
               </TodoHeader>
               <TodoContent>
                 {column.todos.map((todo, index) => (
@@ -60,8 +64,10 @@ function Main() {
                     listIndex={listIndex}
                     index={index}
                     todo={todo}
-                    handleEdit={() => handleOpenModal('form', todo)}
-                    handleDelete={() => handleOpenModal('confirm', todo)}
+                    handleEdit={() => handleOpenModal('form', todo, listIndex)}
+                    handleDelete={() =>
+                      handleOpenModal('confirm', todo, listIndex)
+                    }
                   />
                 ))}
               </TodoContent>
@@ -73,6 +79,7 @@ function Main() {
       <ConfirmModal
         visible={confirmVisible}
         todo={deleteTodo}
+        listIndex={currentListIndex}
         closeModal={() => {
           setDeleteTodo(null);
           setConfirmVisible(false);
@@ -81,6 +88,7 @@ function Main() {
       <FormModal
         visible={formVisible}
         data={editTodo}
+        listIndex={currentListIndex}
         closeModal={() => {
           setEditTodo(null);
           setFormVisible(false);

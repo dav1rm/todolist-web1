@@ -24,17 +24,17 @@ const TodoProvider = ({ children }) => {
 
         setTodos([
           {
-            title: `Pendentes - ${created.length}`,
+            title: `Pendentes`,
             status: 'CREATED',
             todos: created,
           },
           {
-            title: `Em Andamento - ${inProgress.length}`,
+            title: `Em Andamento`,
             status: 'INPROGRESS',
             todos: inProgress,
           },
           {
-            title: `Finalizadas - ${ended.length}`,
+            title: `Finalizadas`,
             status: 'FINALIZED',
             todos: ended,
           },
@@ -45,50 +45,81 @@ const TodoProvider = ({ children }) => {
       });
   }, []);
 
-  const storeTodo = useCallback((data) => {
-    setLoading(true);
-    api
-      .post('todos', data)
-      .then((response) => {
-        setTodos((prev) => [...prev, response.data]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  const updateTodo = useCallback(
-    (id, data) => {
+  const storeTodo = useCallback(
+    async (data) => {
       setLoading(true);
-      api
-        .put(`/todos/${id}`, data)
-        .then((response) => {
-          const updatedTodos = todos.map((todo) =>
-            todo.id === id ? response.data : todo
-          );
-          setTodos(updatedTodos);
-          setLoading(false);
+
+      const response = await api.post('todos', data);
+
+      setTodos(
+        produce(todos, (draft) => {
+          draft[0].todos.push(response.data);
         })
-        .catch(() => {
-          setLoading(false);
-        });
+      );
     },
     [todos]
   );
 
-  const removeTodo = useCallback((id) => {
-    setLoading(true);
-    api
-      .delete(`/todos/${id}`)
-      .then(() => {
-        setTodos((prev) => prev.filter((todo) => todo.id !== id));
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
+  const updateTodo = useCallback(
+    async (id, data, listIndex) => {
+      setLoading(true);
+
+      const todoListIndex = todos.findIndex(
+        (list) => list.status === data.status
+      );
+
+      if (todoListIndex !== -1) {
+        const response = await api.put(`/todos/${id}`, data);
+
+        if (listIndex === todoListIndex) {
+          setTodos(
+            produce(todos, (draft) => {
+              console.log(todoListIndex);
+              const updatedTodos = draft[todoListIndex].todos.map((todo) =>
+                todo.id === id ? response.data : todo
+              );
+
+              draft[todoListIndex].todos = updatedTodos;
+            })
+          );
+        } else {
+          setTodos(
+            produce(todos, (draft) => {
+              draft[listIndex].todos = draft[listIndex].todos.filter(
+                (todo) => todo.id !== id
+              );
+              draft[todoListIndex].todos.unshift(response.data);
+            })
+          );
+        }
+      }
+    },
+    [todos]
+  );
+
+  const removeTodo = useCallback(
+    (id, listIndex) => {
+      console.log(id, listIndex);
+      setLoading(true);
+      setTodos(
+        produce(todos, (draft) => {
+          api
+            .delete(`/todos/${id}`)
+            .then(() => {
+              setLoading(false);
+            })
+            .catch(() => {
+              setLoading(false);
+            });
+
+          draft[listIndex].todos = draft[listIndex].todos.filter(
+            (todo) => todo.id !== id
+          );
+        })
+      );
+    },
+    [todos]
+  );
 
   const moveTodo = (fromList, toList, from, to) => {
     setTodos(
@@ -104,16 +135,18 @@ const TodoProvider = ({ children }) => {
             ...dragged,
             status: draft[toList].status,
           })
-          .then((response) => {
-            const updatedTodos = todos.map((todo) =>
-              todo.id === dragged.id ? response.data : todo
-            );
-            setTodos(updatedTodos);
+          .then(() => {
             setLoading(false);
           })
           .catch(() => {
             setLoading(false);
           });
+
+        draft[toList].todos = draft[toList].todos.map((todo) =>
+          todo.id === dragged.id
+            ? { ...todo, status: draft[toList].status }
+            : todo
+        );
       })
     );
   };

@@ -5,7 +5,7 @@ import { IoIosClose } from 'react-icons/io';
 import { useTodo } from '../../hooks/todos';
 import { Header, Content, Footer } from './styles';
 
-function ConfirmModal({ visible, todo, closeModal }) {
+function ConfirmModal({ visible, todo, closeModal, listIndex }) {
   const { removeTodo } = useTodo();
 
   const customStyles = {
@@ -23,7 +23,7 @@ function ConfirmModal({ visible, todo, closeModal }) {
   };
 
   const handleDelete = () => {
-    removeTodo(todo?.id);
+    removeTodo(todo?.id, listIndex);
     closeModal();
   };
 

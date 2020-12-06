@@ -28,6 +28,11 @@ export const ModalForm = styled.form`
   display: flex;
   flex-direction: column;
 
+  > .error {
+    margin-bottom: 10px;
+    color: #ff5b5b;
+  }
+
   > label {
     margin-bottom: 5px;
     color: #43444f;
